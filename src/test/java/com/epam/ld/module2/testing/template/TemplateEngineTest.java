@@ -3,6 +3,8 @@ package com.epam.ld.module2.testing.template;
 import com.epam.ld.module2.testing.Client;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,11 +27,12 @@ public class TemplateEngineTest {
         client.setAddresses(TEST_ADDRESS);
     }
 
-    @Test
-    public void generateMessageTestWithoutTags() {
-        template = new Template(TEST_TEXT_WITHOUT_TAGS);
+    @ParameterizedTest
+    @ValueSource(strings = {"Testowo","Hello world", "no tag here, sadly"})
+    public void generateMessageTestWithoutTags(String input) {
+        template = new Template(input);
         String message = templateEngine.generateMessage(template, client);
-        assertEquals(TEST_TEXT_WITHOUT_TAGS + "\n" + TEST_ADDRESS, message);
+        assertEquals(input + "\n" + TEST_ADDRESS, message);
     }
 
     @Test
