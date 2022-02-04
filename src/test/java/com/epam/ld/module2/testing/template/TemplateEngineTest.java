@@ -9,7 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TemplateEngineTest {
 
     public static final String TEST_ADDRESS = "Test Address";
-    public static final String TEST_TEXT = "Test text";
+    public static final String TEST_TEXT_WITHOUT_TAGS = "Test text";
+    public static final String TEST_TEXT_WITH_TAGS = "Test #TAG#";
+    public static final String TEST_TEXT_AFTER_REPLACE = "Test Hello";
+
     TemplateEngine templateEngine;
     Template template;
     Client client;
@@ -17,14 +20,21 @@ public class TemplateEngineTest {
     @BeforeEach
     public void setUp() {
         templateEngine = new TemplateEngine();
-        template = new Template(TEST_TEXT);
         client = new Client();
         client.setAddresses(TEST_ADDRESS);
     }
 
     @Test
-    public void generateMessageTest() {
+    public void generateMessageTestWithoutTags() {
+        template = new Template(TEST_TEXT_WITHOUT_TAGS);
         String message = templateEngine.generateMessage(template, client);
-        assertEquals(TEST_TEXT + "\n" + TEST_ADDRESS, message);
+        assertEquals(TEST_TEXT_WITHOUT_TAGS + "\n" + TEST_ADDRESS, message);
+    }
+
+    @Test
+    public void generateMessageTestWithTagsforChange() {
+        template = new Template(TEST_TEXT_WITH_TAGS);
+        String message = templateEngine.generateMessage(template, client);
+        assertEquals(TEST_TEXT_AFTER_REPLACE + "\n" + TEST_ADDRESS, message);
     }
 }
