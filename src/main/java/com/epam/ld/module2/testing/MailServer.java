@@ -5,6 +5,16 @@ package com.epam.ld.module2.testing;
  */
 public class MailServer {
 
+    private mode workMode;
+    public enum mode {
+        CONSOLE,
+        FILE
+    }
+
+    public MailServer(mode workMode) {
+        this.workMode = workMode;
+    }
+
     /**
      * Send notification.
      *
@@ -12,5 +22,13 @@ public class MailServer {
      * @param messageContent the message content
      */
     public void send(String addresses, String messageContent) {
+        switch (workMode){
+            case FILE:
+                //File Handling
+                break;
+            case CONSOLE:
+                //log on console
+                break;
+        }
     }
 }
