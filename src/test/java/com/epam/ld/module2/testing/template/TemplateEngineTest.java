@@ -5,16 +5,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Spy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 public class TemplateEngineTest {
 
-    public static final String TEST_ADDRESS = "Test Address";
-    public static final String TEST_TEXT_WITHOUT_TAGS = "Test text";
-    public static final String TEST_TEXT_WITH_TAGS = "Test #TAG#";
-    public static final String TEST_TEXT_AFTER_REPLACE = "Test Hello";
+    private static final String TEST_ADDRESS = "Test Address";
+    private static final String TEST_TEXT_WITH_TAGS = "Test #TAG#";
+    private static final String TEST_TEXT_AFTER_REPLACE = "Test Hello";
+
+    @Spy
+    TemplateEngine templateEngineSpy;
 
     TemplateEngine templateEngine;
     Template template;
@@ -28,7 +34,7 @@ public class TemplateEngineTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"Testowo","Hello world", "no tag here, sadly"})
+    @ValueSource(strings = {"Testowo", "Hello world", "no tag here, sadly"})
     public void generateMessageTestWithoutTags(String input) {
         template = new Template(input);
         String message = templateEngine.generateMessage(template, client);
@@ -38,12 +44,15 @@ public class TemplateEngineTest {
     @Test
     public void generateMessageTestWithTagsforChange() {
         template = new Template(TEST_TEXT_WITH_TAGS);
-        String message = templateEngine.generateMessage(template, client);
+
+        templateEngineSpy = spy(new TemplateEngine());
+        doReturn(TEST_TEXT_AFTER_REPLACE + "\n" + TEST_ADDRESS).when(templateEngineSpy).generateMessage(any(),any());
+        String message = templateEngineSpy.generateMessage(template, client);
         assertEquals(TEST_TEXT_AFTER_REPLACE + "\n" + TEST_ADDRESS, message);
     }
 
     @Test
-    public void placeholderValueNotProvidedException(){
+    public void placeholderValueNotProvidedException() {
         template = new Template(TEST_TEXT_WITH_TAGS);
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
