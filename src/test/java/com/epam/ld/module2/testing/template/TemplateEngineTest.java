@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TemplateEngineTest {
 
@@ -36,5 +37,13 @@ public class TemplateEngineTest {
         template = new Template(TEST_TEXT_WITH_TAGS);
         String message = templateEngine.generateMessage(template, client);
         assertEquals(TEST_TEXT_AFTER_REPLACE + "\n" + TEST_ADDRESS, message);
+    }
+
+    @Test
+    public void placeholderValueNotProvidedException(){
+        template = new Template(TEST_TEXT_WITH_TAGS);
+        Exception exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> templateEngine.generateMessage(template, client));
     }
 }

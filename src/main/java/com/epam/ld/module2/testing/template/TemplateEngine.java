@@ -21,7 +21,7 @@ public class TemplateEngine {
         return replaceTags(template.getText() + "\n" + client.getAddresses());
     }
 
-    public static String replaceTags(String message) {
+    private static String replaceTags(String message) {
         Pattern p = Pattern.compile("(#.*#)");
         Matcher m = p.matcher(message);
         int i = 1;
