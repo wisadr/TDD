@@ -1,6 +1,7 @@
 package com.epam.ld.module2.testing.template;
 
 import com.epam.ld.module2.testing.Client;
+import org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,6 +15,9 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 public class TemplateEngineTest {
+
+    public interface IntegrationTest {
+    }
 
     private static final String TEST_ADDRESS = "Test Address";
     private static final String TEST_TEXT_WITH_TAGS = "Test #TAG#";
@@ -42,6 +46,7 @@ public class TemplateEngineTest {
     }
 
     @Test
+    @Category(IntegrationTest.class)
     public void generateMessageTestWithTagsforChange() {
         template = new Template(TEST_TEXT_WITH_TAGS);
 
